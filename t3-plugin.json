@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "com.t3code.github",
+  "displayName": "GitHub workflow and pull requests",
+  "version": "0.1.0",
+  "runtime": { "kind": "managed-app", "command": ["github-t3-plugin"], "restart": "on-failure" },
+  "contributes": {
+    "panels": [
+      { "id": "github.checks", "title": "Pull request checks", "surface": "thread.sidePanel" },
+      { "id": "github.waitpoints", "title": "GitHub waits", "surface": "thread.main" }
+    ],
+    "hooks": ["thread.created", "turn.settled"]
+  },
+  "capabilities": [
+    { "kind": "events.read", "eventTypes": ["turn.settled", "thread.created"] },
+    { "kind": "threads.read" },
+    { "kind": "threads.dispatch" },
+    { "kind": "network.connect", "hosts": ["api.github.com"] },
+    { "kind": "ui.embed", "surfaces": ["thread.sidePanel", "thread.main"] }
+  ]
+}
