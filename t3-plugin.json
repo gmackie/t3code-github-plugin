@@ -9,6 +9,7 @@
       { "id": "github.checks", "title": "Pull request checks", "surface": "thread.sidePanel" },
       { "id": "github.waitpoints", "title": "GitHub waits", "surface": "thread.main" }
     ],
+    "workflows": [{ "id": "github.pull-request-review", "title": "Pull request review", "surface": "thread.main" }],
     "hooks": ["thread.created", "turn.settled"]
   },
   "capabilities": [
