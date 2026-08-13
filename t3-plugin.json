@@ -3,7 +3,7 @@
   "id": "com.t3code.github",
   "displayName": "GitHub workflow and pull requests",
   "version": "0.1.0",
-  "runtime": { "kind": "managed-app", "command": ["github-t3-plugin"], "restart": "on-failure" },
+  "runtime": { "kind": "managed-app", "command":["bun","src/stdio.ts"], "restart": "on-failure" },
   "contributes": {
     "panels": [
       { "id": "github.checks", "title": "Pull request checks", "surface": "thread.sidePanel" },
