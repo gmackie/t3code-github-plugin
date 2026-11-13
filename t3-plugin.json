@@ -1,22 +1,66 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "id": "com.t3code.github",
   "displayName": "GitHub workflow and pull requests",
-  "version": "0.1.0",
-  "runtime": { "kind": "managed-app", "command":["bun","src/stdio.ts"], "restart": "on-failure" },
+  "version": "0.2.0",
+  "description": "Pull request checks, review and waits for the thread's GitHub checkout.",
+  "mcpServer": {
+    "name": "github",
+    "transport": {
+      "type": "stdio",
+      "command": "bun",
+      "args": [
+        "${pluginRoot}/src/mcp.ts"
+      ],
+      "env": [
+        {
+          "name": "GITHUB_TOKEN",
+          "value": "",
+          "sensitive": true,
+          "title": "GitHub token",
+          "description": "Fine-grained or classic token with read access to pull requests, checks and commit statuses; pull request write access to approve."
+        },
+        {
+          "name": "GITHUB_API_URL",
+          "value": "https://api.github.com",
+          "title": "GitHub API endpoint",
+          "description": "Use https://<host>/api/v3 for GitHub Enterprise Server."
+        },
+        {
+          "name": "GITHUB_POLL_SECONDS",
+          "value": "30",
+          "title": "Panel refresh interval in seconds (15-3600)"
+        }
+      ]
+    }
+  },
   "contributes": {
     "panels": [
-      { "id": "github.checks", "title": "Pull request checks", "surface": "thread.sidePanel" },
-      { "id": "github.waitpoints", "title": "GitHub waits", "surface": "thread.main" }
+      {
+        "id": "github-checks",
+        "title": "Pull request checks",
+        "scope": "thread",
+        "resourceUri": "ui://github/checks.html"
+      },
+      {
+        "id": "github-waits",
+        "title": "GitHub waits",
+        "scope": "thread",
+        "resourceUri": "ui://github/waits.html"
+      }
     ],
-    "workflows": [{ "id": "github.pull-request-review", "title": "Pull request review", "surface": "thread.main" }],
-    "hooks": ["thread.created", "turn.settled"]
+    "commands": [
+      {
+        "id": "github-open-checks",
+        "title": "GitHub: Open pull request checks",
+        "panel": "github-checks"
+      },
+      {
+        "id": "github-open-waits",
+        "title": "GitHub: Open waits",
+        "panel": "github-waits"
+      }
+    ]
   },
-  "capabilities": [
-    { "kind": "events.read", "eventTypes": ["turn.settled", "thread.created"] },
-    { "kind": "threads.read" },
-    { "kind": "threads.dispatch" },
-    { "kind": "network.connect", "hosts": ["api.github.com"] },
-    { "kind": "ui.embed", "surfaces": ["thread.sidePanel", "thread.main"] }
-  ]
+  "t3Tools": []
 }

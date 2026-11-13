@@ -33,4 +33,11 @@ describe("GitHub checks plugin", () => {
     expect(workflow.evidence?.[0]?.status).toBe("positive");
     expect(workflow.actions?.[0]?.id).toBe("approve");
   });
+
+  it("offers sending the review to the agent once approved", () => {
+    const snapshot = parseChecks([{ name: "build", state: "SUCCESS" }], "acme/repo", 1);
+    const workflow = buildPullRequestWorkflow(snapshot, { approved: true });
+    expect(workflow.currentStage).toBe("execute");
+    expect(workflow.actions?.map((action) => action.id)).toEqual(["dispatch"]);
+  });
 });
