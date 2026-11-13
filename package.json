@@ -1,7 +1,26 @@
 {
   "name": "@t3code/github-plugin",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
-  "scripts": { "test": "bun test", "typecheck": "bunx tsc --noEmit" },
-  "devDependencies": { "@types/bun": "1.3.14" }
+  "scripts": {
+    "test": "bun test",
+    "typecheck": "bunx tsc --noEmit",
+    "mcp": "bun src/mcp.ts",
+    "inspect": "bunx @modelcontextprotocol/inspector@2.13.0 -- bun src/mcp.ts"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/client": "^2.4.0",
+    "@types/bun": "1.3.14",
+    "happy-dom": "^21.0.4",
+    "typescript": "7.0.2"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/ext-apps": "^2.0.4",
+    "@modelcontextprotocol/server": "^2.4.0",
+    "zod": "^4.6.7"
+  },
+  "bin": {
+    "github-t3-plugin-mcp": "src/mcp.ts"
+  }
 }

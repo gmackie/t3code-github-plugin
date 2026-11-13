@@ -39,12 +39,12 @@ export function buildPullRequestWorkflow(snapshot: GitHubChecksSnapshot, state: 
     { id: "context", stage: "context" as const, title: "Collect GitHub check context", state: "completed" as const, detail: `${snapshot.summary.total} checks` },
     { id: "propose", stage: "propose" as const, title: "Propose review response", state: "completed" as const },
     { id: "review", stage: "review" as const, title: "Review check evidence", state: state.approved ? "completed" as const : "active" as const },
-    { id: "approve", stage: "approve" as const, title: "Approve PR response", state: state.approved ? "completed" as const : "pending" as const },
-    { id: "execute", stage: "execute" as const, title: "Dispatch approved response", state: state.approved ? "active" as const : "pending" as const },
+    { id: "approve", stage: "approve" as const, title: "Approve the pull request on GitHub", state: state.approved ? "completed" as const : "pending" as const },
+    { id: "execute", stage: "execute" as const, title: "Send the approved review to the agent", state: state.approved ? "active" as const : "pending" as const },
     { id: "verify", stage: "verify" as const, title: "Verify GitHub checks", state: "pending" as const, detail: healthy ? "All checks settled successfully" : `${snapshot.summary.failed} failed · ${snapshot.summary.pending} pending` },
     { id: "respond", stage: "respond" as const, title: "Prepare review response", state: "pending" as const },
   ];
-  return { pluginId: "com.t3code.github", workflowId: "github.pull-request-review", title: "Pull request review", currentStage: state.approved ? "execute" : "review", refreshedAt: new Date().toISOString(), steps, evidence: [{ id: "github-checks", title: "GitHub checks", kind: "check", status: healthy ? "positive" : snapshot.summary.failed > 0 ? "negative" : "warning", detail: `${snapshot.summary.passed}/${snapshot.summary.total} passing` }], actions: state.approved ? [] : [{ id: "approve", title: "Approve PR response", tone: "primary" }] };
+  return { pluginId: "com.t3code.github", workflowId: "github.pull-request-review", title: "Pull request review", currentStage: state.approved ? "execute" : "review", refreshedAt: new Date().toISOString(), steps, evidence: [{ id: "github-checks", title: "GitHub checks", kind: "check", status: healthy ? "positive" : snapshot.summary.failed > 0 ? "negative" : "warning", detail: `${snapshot.summary.passed}/${snapshot.summary.total} passing` }], actions: state.approved ? [{ id: "dispatch", title: "Send to agent", tone: "primary" }] : [{ id: "approve", title: "Approve on GitHub", tone: "primary" }] };
 }
 
 function normalizeState(value: unknown): CheckState {

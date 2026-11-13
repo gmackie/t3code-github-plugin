@@ -17,10 +17,29 @@ export type GitHubChecksSnapshot = {
   url?: string;
 };
 
-export type GitHubWait = {
-  id: string;
+export type PullRequestInfo = {
   repository: string;
-  pullRequest: number;
-  condition: "checks_settled" | "new_review_activity" | "pull_request_closed";
-  expiresAt: string;
+  number: number;
+  title: string;
+  url: string;
+  state: "open" | "closed" | "merged";
+  draft: boolean;
+  headSha: string;
+  headRef: string;
+  author?: string;
+  updatedAt?: string;
 };
+
+export type PullRequestReview = {
+  id: number;
+  author?: string;
+  state: string;
+  submittedAt?: string;
+  commitId?: string;
+};
+
+export type ReviewComment = { author?: string; createdAt: string };
+
+export type WaitCondition = "checks_settled" | "new_review_activity" | "pull_request_closed";
+
+export type WaitStatus = { condition: WaitCondition; met: boolean; detail: string };
